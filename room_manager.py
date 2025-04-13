@@ -9,11 +9,13 @@ class Room:
         self.players = [owner]  # Liste des joueurs
         self.game_started = False  # Indique si la partie est en cours
         self.choices = {}  # Stocke les choix des joueurs
-        self.winning_cases = {
-            "rock": "scissors",
-            "paper": "rock",
-            "scissors": "paper"
-        }
+        self.winning_cases = {}
+        self.elements = [
+            "rock", "paper", "scissors", "fire", "water", "air", "sponge", "gun", "lightning", "devil"
+        ]
+        for i, elem in enumerate(self.elements):
+            beats = [self.elements[(i + j) % len(self.elements)] for j in range(1, 6)]
+            self.winning_cases[elem] = beats
 
     def add_player(self, player: Player):
         if self.game_started:
@@ -37,16 +39,33 @@ class Room:
         return True
 
     def determine_winner(self):
-        """Détermine le gagnant (logique simplifiée pour l'instant)."""
-        if self.players[0].get_choice() == self.players[1].get_choice():
-            return "Match nul!"
-        
-        print(f"Choix des joueurs : {self.winning_cases[self.players[0].get_choice()]}")  # Debug
-        print(f"Choix des joueurs : {self.winning_cases[self.players[1].get_choice()]}")  # Debug
-        if self.winning_cases[self.players[0].get_choice()] == self.players[1].get_choice():
-            return f"{self.players[0].name} won!"
+        """Détermine le ou les gagnants parmi plusieurs joueurs dans l'Ultimate Shifumi."""
+        scores = {player.name: 0 for player in self.players}
+        choices = {player.name: player.get_choice() for player in self.players}
+
+        # Tous les choix faits
+        unique_choices = set(choices.values())
+        if len(unique_choices) == 1:
+            return "Match nul ! Tous les joueurs ont choisi la même chose."
+
+        # Comparer tous les joueurs entre eux
+        for i, player1 in enumerate(self.players):
+            choice1 = player1.get_choice()
+            for j, player2 in enumerate(self.players):
+                if i == j:
+                    continue
+                choice2 = player2.get_choice()
+                if choice2 in self.winning_cases[choice1]:
+                    scores[player1.name] += 1
+
+        # Trouver le score max
+        max_score = max(scores.values())
+        winners = [name for name, score in scores.items() if score == max_score]
+
+        if len(winners) == 1:
+            return f"{winners[0]} has won the round !"
         else:
-            return f"{self.players[1].name} won!"
+            return f"deuce between : {', '.join(winners)}"
         
     async def broadcast(self, message: str):
         """Envoie un message à tous les joueurs de la room."""

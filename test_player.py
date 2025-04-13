@@ -34,9 +34,9 @@ async def send_choice(websocket):
     """Handles sending the game choice."""
     try:
         choice = None
-        while choice not in ["rock", "paper", "scissors"]:
-            choice = await asyncio.to_thread(input, "Choose: rock, paper, or scissors: ")
-            if choice not in ["rock", "paper", "scissors"]:
+        while choice not in ["rock", "paper", "scissors", "fire", "water", "air", "sponge", "gun", "lightning", "devil"]:
+            choice = await asyncio.to_thread(input, "Choose: rock, paper, scissor, fire, water, air, sponge, gun, lightning or devil: ")
+            if choice not in ["rock", "paper", "scissors", "fire", "water", "air", "sponge", "gun", "lightning", "devil"]:
                 print("❌ Invalid choice. Try again.")
         await websocket.send(choice)
         print("✅ Choice sent!")
