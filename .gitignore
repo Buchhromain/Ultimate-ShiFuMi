@@ -1,0 +1,37 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.log
+venv/
+
+# Environnements virtuels
+venv/
+.env
+
+# IDEs et éditeurs
+.vscode/
+.idea/
+*.swp
+
+# Systèmes d'exploitation
+.DS_Store
+Thumbs.db
+
+# Dépendances
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Tests
+.coverage
+htmlcov/
+.tox/
+.nox/
+pytest_cache/
+.cache/
+
+# FastAPI/Starlette
+instance/
